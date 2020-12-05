@@ -2,9 +2,24 @@ package main
 
 import (
 	"fmt"
+	"os"
 	"strconv"
 	"strings"
 )
+
+func main() {
+	var flag = os.Args[1]
+	args := make(map[string]bool)
+
+	switch flag {
+	case "--newline":
+		args["newline"] = true
+	case "--linenum":
+		args["linenum"] = true
+	}
+
+	echo(os.Args[1:], args)
+}
 
 func echo(args []string, options map[string]bool) {
 	if options["newline"] {
