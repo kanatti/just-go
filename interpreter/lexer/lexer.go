@@ -19,14 +19,20 @@ func New(input string) *Lexer {
 func (l *Lexer) nextToken() token.Token {
 	l.ch = l.read()
 
-	l.skipWhiteSpace()
+	l.consumeWhiteSpace()
 
 	var tokenType token.TokenType
 	var literal = string(l.ch)
 
 	switch l.ch {
 	case '=':
-		tokenType = token.ASSIGN
+		if l.peek() == '=' {
+			l.consume()
+			literal = "=="
+			tokenType = token.EQUALS
+		} else {
+			tokenType = token.ASSIGN
+		}
 	case '+':
 		tokenType = token.PLUS
 	case ',':
@@ -41,13 +47,31 @@ func (l *Lexer) nextToken() token.Token {
 		tokenType = token.LBRACE
 	case '}':
 		tokenType = token.RBRACE
+	case '!':
+		if l.peek() == '=' {
+			l.consume()
+			literal = "!="
+			tokenType = token.NOT_EQUALS
+		} else {
+			tokenType = token.NOT
+		}
+	case '-':
+		tokenType = token.MINUS
+	case '/':
+		tokenType = token.SLASH
+	case '*':
+		tokenType = token.ASTERISK
+	case '<':
+		tokenType = token.LESS_THAN
+	case '>':
+		tokenType = token.GREATER_THAN
 	case 0:
 		tokenType = token.EOF
 		literal = ""
 	default:
 		if isLetter(l.ch) {
 			literal = l.readIdentifier()
-			tokenType = token.LookupTokenType(literal)
+			tokenType = token.LookupTokenTypeFromString(literal)
 		} else if isNum(l.ch) {
 			literal = l.readNum()
 			tokenType = token.INT
@@ -66,6 +90,11 @@ func (l *Lexer) read() byte {
 	return ch
 }
 
+func (l *Lexer) consume() {
+	l.currentPos = l.nextPos
+	l.nextPos += 1
+}
+
 func (l *Lexer) peek() byte {
 	if l.nextPos >= len(l.input) {
 		return 0
@@ -77,7 +106,7 @@ func (l *Lexer) peek() byte {
 func (l *Lexer) readIdentifier() string {
 	startPos := l.currentPos
 	for isLetterOrNum(l.peek()) {
-		l.read()
+		l.consume()
 	}
 	return l.input[startPos : l.currentPos+1]
 }
@@ -85,12 +114,12 @@ func (l *Lexer) readIdentifier() string {
 func (l *Lexer) readNum() string {
 	startPos := l.currentPos
 	for isNum(l.peek()) {
-		l.read()
+		l.consume()
 	}
 	return l.input[startPos : l.currentPos+1]
 }
 
-func (l *Lexer) skipWhiteSpace() {
+func (l *Lexer) consumeWhiteSpace() {
 	for isWhiteSpace(l.ch) {
 		l.ch = l.read()
 	}

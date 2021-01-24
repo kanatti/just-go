@@ -44,6 +44,7 @@ fn add(x, y) {
 };
 
 let result = add(num1, num2);
+(2/3 > 0) == true
 `
 
 	tests := []struct {
@@ -84,6 +85,15 @@ let result = add(num1, num2);
 		{token.IDENT, "num2"},
 		{token.RPAREN, ")"},
 		{token.SEMICOLON, ";"},
+		{token.LPAREN, "("},
+		{token.INT, "2"},
+		{token.SLASH, "/"},
+		{token.INT, "3"},
+		{token.GREATER_THAN, ">"},
+		{token.INT, "0"},
+		{token.RPAREN, ")"},
+		{token.EQUALS, "=="},
+		{token.TRUE, "true"},
 	}
 	lexer := New(input)
 

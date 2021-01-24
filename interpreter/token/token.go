@@ -50,30 +50,48 @@ const (
 	IDENT TokenType = 2
 	INT   TokenType = 3
 
-	// Operators
-	ASSIGN TokenType = 4
-	PLUS   TokenType = 5
-
 	// Delimiters
-	COMMA     TokenType = 6
-	SEMICOLON TokenType = 7
+	COMMA     TokenType = 4
+	SEMICOLON TokenType = 5
 
-	LPAREN TokenType = 8
-	RPAREN TokenType = 9
-	LBRACE TokenType = 10
-	RBRACE TokenType = 11
+	LPAREN TokenType = 6
+	RPAREN TokenType = 7
+	LBRACE TokenType = 8
+	RBRACE TokenType = 9
+
+	// Operators
+	ASSIGN       TokenType = 20
+	PLUS         TokenType = 21
+	EQUALS       TokenType = 22
+	NOT          TokenType = 23
+	NOT_EQUALS   TokenType = 24
+	MINUS        TokenType = 25
+	SLASH        TokenType = 26
+	ASTERISK     TokenType = 27
+	LESS_THAN    TokenType = 28
+	GREATER_THAN TokenType = 29
 
 	// Keywords
-	FUNCTION TokenType = 12
-	LET      TokenType = 13
+	FUNCTION TokenType = 40
+	LET      TokenType = 41
+	TRUE     TokenType = 42
+	FALSE    TokenType = 43
+	IF       TokenType = 44
+	ELSE     TokenType = 45
+	RETURN   TokenType = 46
 )
 
 var keywords = map[string]TokenType{
-	"fn":  FUNCTION,
-	"let": LET,
+	"fn":     FUNCTION,
+	"let":    LET,
+	"true":   TRUE,
+	"false":  FALSE,
+	"if":     IF,
+	"else":   ELSE,
+	"return": RETURN,
 }
 
-func LookupTokenType(str string) TokenType {
+func LookupTokenTypeFromString(str string) TokenType {
 	if tok, ok := keywords[str]; ok {
 		return tok
 	}
