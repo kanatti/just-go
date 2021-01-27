@@ -16,7 +16,7 @@ func New(input string) *Lexer {
 	return l
 }
 
-func (l *Lexer) nextToken() token.Token {
+func (l *Lexer) NextToken() token.Token {
 	l.ch = l.read()
 
 	l.consumeWhiteSpace()

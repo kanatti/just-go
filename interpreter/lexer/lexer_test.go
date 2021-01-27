@@ -23,7 +23,7 @@ func TestNextTokenBasic(t *testing.T) {
 	lexer := New(input)
 
 	for i, test := range tests {
-		tok := lexer.nextToken()
+		tok := lexer.NextToken()
 
 		if tok.Type != test.expectedType {
 			t.Errorf("tests[%d] - Wrong Token Type expected: %s got: %s", i, test.expectedType, tok.Type)
@@ -98,7 +98,7 @@ let result = add(num1, num2);
 	lexer := New(input)
 
 	for i, test := range tests {
-		tok := lexer.nextToken()
+		tok := lexer.NextToken()
 
 		if tok.Type != test.expectedType {
 			t.Errorf("tests[%d] - Wrong Token Type expected: %s got: %s", i, test.expectedType, tok.Type)

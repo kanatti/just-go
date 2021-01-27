@@ -1,10 +1,16 @@
 package token
 
+import "fmt"
+
 type TokenType int8
 
 type Token struct {
 	Type    TokenType
 	Literal string
+}
+
+func (t Token) String() string {
+	return fmt.Sprintf("{ TokenType: %s, Literal: %s }", t.Type, t.Literal)
 }
 
 func (t TokenType) String() string {
