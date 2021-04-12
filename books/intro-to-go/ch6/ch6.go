@@ -25,6 +25,10 @@ func Run() {
 	fmt.Println("x before increment", x)
 	increment(&x)
 	fmt.Println("x after increment", x)
+
+	callTwice(func() {
+		fmt.Println("Hello! twice")
+	})
 }
 
 func averageSum(xs []float64) (float64, float64, int) {
@@ -68,4 +72,9 @@ func deferAndRecover() {
 // * is used both as ptr type and deference operation
 func increment(xPtr *int) {
 	*xPtr = *xPtr + 1
+}
+
+func callTwice(f func()) {
+	f()
+	f()
 }
