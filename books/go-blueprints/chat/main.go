@@ -9,6 +9,7 @@ import (
 	"sync"
 
 	"github.com/gorilla/mux"
+	"github.com/gorilla/websocket"
 )
 
 func getProjectPath() string {
@@ -53,6 +54,38 @@ func (t *templateHandler) ServeHTTP(res http.ResponseWriter, req *http.Request) 
 	}
 }
 
+var upgrader = &websocket.Upgrader{
+	ReadBufferSize:  socketBufferSize,
+	WriteBufferSize: socketBufferSize,
+}
+
+type roomHandler struct {
+	room *Room
+}
+
+// Upgrades HTTP connection to socket connection
+// Joins the common room
+// Leaves the room when connection is closed
+// Reads and Writes concurrently into the websocket
+func (r *roomHandler) ServeHTTP(res http.ResponseWriter, req *http.Request) {
+	socket, err := upgrader.Upgrade(res, req, nil)
+
+	if err != nil {
+		log.Fatal("ServeHttp:", err)
+		return
+	}
+
+	user := newUser(socket, r.room)
+
+	r.room.join <- user
+	defer func() {
+		r.room.leave <- user
+	}()
+
+	go user.write()
+	user.read()
+}
+
 func main() {
 	chatHandler := &templateHandler{
 		filename: "chat.html",
@@ -70,6 +103,8 @@ func main() {
 		},
 	}
 
+	commonRoomHandler := &roomHandler{room: newRoom()}
+
 	router := mux.NewRouter()
 	router.Handle("/", chatHandler)
 	router.Handle("/404", pageNotFoundHandler)
@@ -78,7 +113,10 @@ func main() {
 		res.Header().Add("Location", "/about")
 		res.WriteHeader(302)
 	})
+	router.Handle("/room", commonRoomHandler)
 	http.Handle("/", router)
+
+	go commonRoomHandler.room.run()
 
 	log.Print("Serving on: ", 3000)
 	if err := http.ListenAndServe("localhost:3000", nil); err != nil {
