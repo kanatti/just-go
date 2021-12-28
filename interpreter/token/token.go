@@ -4,50 +4,6 @@ import "fmt"
 
 type TokenType int8
 
-type Token struct {
-	Type    TokenType
-	Literal string
-}
-
-func (t Token) String() string {
-	return fmt.Sprintf("{ TokenType: %s, Literal: %s }", t.Type, t.Literal)
-}
-
-func (t TokenType) String() string {
-	switch t {
-	case ILLEGAL:
-		return "ILLEGAL"
-	case EOF:
-		return "EOF"
-	case IDENT:
-		return "IDENTIFIER"
-	case INT:
-		return "INTEGER"
-	case ASSIGN:
-		return "="
-	case PLUS:
-		return "+"
-	case COMMA:
-		return ","
-	case SEMICOLON:
-		return ";"
-	case LPAREN:
-		return "("
-	case RPAREN:
-		return ")"
-	case LBRACE:
-		return "{"
-	case RBRACE:
-		return "}"
-	case FUNCTION:
-		return "fn"
-	case LET:
-		return "let"
-	default:
-		return "UNKNOWN TOKEN"
-	}
-}
-
 const (
 	ILLEGAL TokenType = 0
 	EOF     TokenType = 1
@@ -86,6 +42,52 @@ const (
 	ELSE     TokenType = 45
 	RETURN   TokenType = 46
 )
+
+func (t TokenType) String() string {
+	switch t {
+	case ILLEGAL:
+		return "ILLEGAL"
+	case EOF:
+		return "EOF"
+	case IDENT:
+		return "IDENTIFIER"
+	case INT:
+		return "INTEGER"
+	case ASSIGN:
+		return "="
+	case PLUS:
+		return "+"
+	case COMMA:
+		return ","
+	case SEMICOLON:
+		return ";"
+	case LPAREN:
+		return "("
+	case RPAREN:
+		return ")"
+	case LBRACE:
+		return "{"
+	case RBRACE:
+		return "}"
+	case FUNCTION:
+		return "fn"
+	case LET:
+		return "let"
+	default:
+		return "UNKNOWN TOKEN"
+	}
+}
+
+type Token struct {
+	Type    TokenType
+	Literal string
+}
+
+func (t *Token) String() string {
+	return fmt.Sprintf("{ TokenType: %s, Literal: %s }", t.Type, t.Literal)
+}
+
+// Helpers
 
 var keywords = map[string]TokenType{
 	"fn":     FUNCTION,

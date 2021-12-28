@@ -11,12 +11,12 @@ type Lexer struct {
 	ch         byte // current character under examination
 }
 
-func New(input string) *Lexer {
+func NewLexer(input string) *Lexer {
 	l := &Lexer{input: input}
 	return l
 }
 
-func (l *Lexer) NextToken() token.Token {
+func (l *Lexer) NextToken() *token.Token {
 	l.ch = l.read()
 
 	l.consumeWhiteSpace()
@@ -80,7 +80,7 @@ func (l *Lexer) NextToken() token.Token {
 		}
 	}
 
-	return token.Token{Type: tokenType, Literal: literal}
+	return &token.Token{Type: tokenType, Literal: literal}
 }
 
 func (l *Lexer) read() byte {

@@ -20,7 +20,7 @@ func TestNextTokenBasic(t *testing.T) {
 		{token.LBRACE, "{"},
 		{token.RBRACE, "}"},
 	}
-	lexer := New(input)
+	lexer := NewLexer(input)
 
 	for i, test := range tests {
 		tok := lexer.NextToken()
@@ -95,7 +95,7 @@ let result = add(num1, num2);
 		{token.EQUALS, "=="},
 		{token.TRUE, "true"},
 	}
-	lexer := New(input)
+	lexer := NewLexer(input)
 
 	for i, test := range tests {
 		tok := lexer.NextToken()
